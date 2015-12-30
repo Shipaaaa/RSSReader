@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">RSSReader</string>
-<<<<<<< HEAD
     <string name="action_settings">Настройки</string>
-=======
-    <string name="action_settings">Settings</string>
->>>>>>> master
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="addLinesDialogTitle">Название ленты</string>
+    <string name="cancel">Отмена</string>
+    <string name="add">Добавить</string>
+    <string name="hint_name">Введите название</string>
+    <string name="hint_url">Введите URL</string>
 </resources>
