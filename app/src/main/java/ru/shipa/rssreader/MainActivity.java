@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase db;
     Context ctx = this;
 
+    FragmentLines fragmentLines = new FragmentLines(ctx);
+    FragmentNews fragmentNews = new FragmentNews();
+    FragmentFavouriteNews fragmentFavouriteNews = new FragmentFavouriteNews();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 addLine(String.valueOf(etName.getText()), String.valueOf(etUrl.getText()));
                                 Snackbar.make(view, "Лента добавленна", Snackbar.LENGTH_SHORT).show();
+                                fragmentLines.refreshLines();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -120,11 +125,11 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new FragmentLines(ctx);
+                    return fragmentLines;
                 case 1:
-                    return new FragmentNews();
+                    return fragmentNews;
                 case 2:
-                    return new FragmentFavouriteNews();
+                    return fragmentFavouriteNews;
             }
             return null;
         }

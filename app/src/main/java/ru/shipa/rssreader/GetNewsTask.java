@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
     GetNewsTask(Context ctx, FragmentLines fragmentLines) {
         this.ctx = ctx;
         this.fragmentLines = fragmentLines;
+        dbHelper = new DBHelper(ctx);
+        db = dbHelper.getWritableDatabase();
     }
 
     @Override
@@ -35,7 +38,7 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
 
             do {
                 try {
-                    parseNewsXML(getNewsRequest(params[0]));
+                    parseNewsXML(getNewsRequest(c.getString(c.getColumnIndex("lineUrl"))));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -78,6 +81,6 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
     }
 
     private void parseNewsXML(String result) {
-
+        Log.d("result", result);
     }
 }

@@ -25,8 +25,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 + "newsTitle text,"
                 + "newsLink text,"
                 + "newsDescription text,"
-                + "newsPubDate text,"
-                + ");");
+                + "newsPubDate text" + ");");
     }
 
     @Override
