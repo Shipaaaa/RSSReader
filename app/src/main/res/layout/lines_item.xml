@@ -9,30 +9,37 @@
         android:id="@+id/ivLine"
         android:layout_margin="15dp"
         android:src="@android:drawable/ic_menu_report_image"
-        android:layout_alignWithParentIfMissing="false"
         android:layout_centerVertical="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Название"
         android:id="@+id/tvLine"
         android:layout_toRightOf="@+id/ivLine"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
-        android:textColor="@color/primary_text" />
+        android:layout_marginBottom="2dp"
+        android:textColor="@color/primary_text"
+        android:text="sdfsdf" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Дата обновления"
-        android:id="@+id/tvDateLine"
+        android:text="@string/refresh"
+        android:id="@+id/tvRefresh"
         android:layout_below="@+id/tvLine"
         android:layout_toRightOf="@+id/ivLine"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/primary_text" />
+        android:textColor="@color/primary_text"
+        android:paddingBottom="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tvDateLine"
+        android:layout_toRightOf="@+id/tvRefresh"
+        android:textColor="@color/primary_text"
+        android:layout_alignTop="@+id/tvRefresh" />
 
 </RelativeLayout>

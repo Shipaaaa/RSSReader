@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase db;
     Context ctx = this;
 
-    FragmentLines fragmentLines = new FragmentLines(ctx);
+    FragmentLines fragmentLines = new FragmentLines();
     FragmentNews fragmentNews = new FragmentNews();
     FragmentFavouriteNews fragmentFavouriteNews = new FragmentFavouriteNews();
 
@@ -74,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 addLine(String.valueOf(etName.getText()), String.valueOf(etUrl.getText()));
-                                Snackbar.make(view, "Лента добавленна", Snackbar.LENGTH_SHORT).show();
-                                fragmentLines.refreshLines();
+                                fragmentLines.loadLines();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -90,10 +90,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addLine(String name, String url) {
+        Cursor cursor=db.query("lines_list", new String[]{"lineUrl"}, "lineUrl = (?)", new String[]{url}, null, null, null);
+        if (cursor.getCount() > 0){
+            Snackbar.make(fab, R.string.linesAddedError, Snackbar.LENGTH_SHORT).show();
+            cursor.close();
+            return;
+        }
+        cursor.close();
         ContentValues cv = new ContentValues();
         cv.put("lineName", name);
         cv.put("lineUrl", url);
+        cv.put("lineDate", getString(R.string.never));
         db.insert("lines_list", null, cv);
+        Snackbar.make(fab, R.string.linesAdded, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -143,11 +152,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Ленты";
+                    return getString(R.string.lines);
                 case 1:
-                    return "Новости";
+                    return getString(R.string.news);
                 case 2:
-                    return "Закладки";
+                    return getString(R.string.favourite);
             }
             return null;
         }

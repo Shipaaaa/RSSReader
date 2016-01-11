@@ -18,7 +18,8 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("create table lines_list ("
                 + "id integer primary key autoincrement,"
                 + "lineName text,"
-                + "lineUrl text" + ");");
+                + "lineUrl text,"
+                + "lineDate text" + ");");
 
         db.execSQL("create table news ("
                 + "id integer primary key autoincrement,"

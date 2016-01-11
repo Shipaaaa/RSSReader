@@ -4,12 +4,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -23,7 +29,8 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
     SQLiteDatabase db;
     FragmentLines fragmentLines;
 
-    GetNewsTask(Context ctx, FragmentLines fragmentLines) {
+    public GetNewsTask(Context ctx, FragmentLines fragmentLines) {
+        super();
         this.ctx = ctx;
         this.fragmentLines = fragmentLines;
         dbHelper = new DBHelper(ctx);
@@ -35,11 +42,10 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
         String[] columns = new String[]{"lineName", "lineUrl"};
         Cursor c = db.query("lines_list", columns, null, null, null, null, null);
         if (c.moveToFirst()) {
-
             do {
                 try {
                     parseNewsXML(getNewsRequest(c.getString(c.getColumnIndex("lineUrl"))));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } while (c.moveToNext());
@@ -61,7 +67,6 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
 
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
-            conn.setRequestMethod("POST");
             conn.setRequestProperty("charset", "utf-8");
             conn.connect();
 
@@ -82,5 +87,56 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
 
     private void parseNewsXML(String result) {
         Log.d("result", result);
+        String tmp = "", LOG_TAG = "Parse";
+
+        try {
+            // получаем фабрику
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            // включаем поддержку namespace (по умолчанию выключена)
+            factory.setNamespaceAware(true);
+            // создаем парсер
+            XmlPullParser xpp = factory.newPullParser();
+            // даем парсеру на вход Reader
+            xpp.setInput(new StringReader(result));
+
+            while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
+                switch (xpp.getEventType()) {
+                    // начало документа
+                    case XmlPullParser.START_DOCUMENT:
+                        Log.d(LOG_TAG, "START_DOCUMENT");
+                        break;
+                    // начало тэга
+                    case XmlPullParser.START_TAG:
+                        Log.d(LOG_TAG, "START_TAG: name = " + xpp.getName()
+                                + ", depth = " + xpp.getDepth() + ", attrCount = "
+                                + xpp.getAttributeCount());
+                        tmp = "";
+                        for (int i = 0; i < xpp.getAttributeCount(); i++) {
+                            tmp = tmp + xpp.getAttributeName(i) + " = "
+                                    + xpp.getAttributeValue(i) + ", ";
+                        }
+                        if (!TextUtils.isEmpty(tmp))
+                            Log.d(LOG_TAG, "Attributes: " + tmp);
+                        break;
+                    // конец тэга
+                    case XmlPullParser.END_TAG:
+                        Log.d(LOG_TAG, "END_TAG: name = " + xpp.getName());
+                        break;
+                    // содержимое тэга
+                    case XmlPullParser.TEXT:
+                        Log.d(LOG_TAG, "text = " + xpp.getText());
+                        break;
+
+                    default:
+                        break;
+                }
+                // следующий элемент
+                xpp.next();
+            }
+            Log.d(LOG_TAG, "END_DOCUMENT");
+
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }
