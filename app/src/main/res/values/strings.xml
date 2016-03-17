@@ -5,14 +5,22 @@
     <string name="addLinesDialogTitle">Название ленты</string>
     <string name="cancel">Отмена</string>
     <string name="add">Добавить</string>
+
     <string name="hint_name">Введите название</string>
     <string name="hint_url">Введите URL</string>
+
     <string name="deleteLines">Удалить ленту</string>
     <string name="refresh">"Обновленно: "</string>
+
     <string name="linesAdded">Лента добавленна</string>
     <string name="linesAddedError">Лента с такой ссылкой уже существует</string>
+    <string name="linesEmptyUrl">Введите ссылку на канал</string>
     <string name="lines">Ленты</string>
     <string name="news">Новости</string>
     <string name="favourite">Закладки</string>
     <string name="never">никогда</string>
+
+    <string name="rvLinesEmpty">Список лент пуст</string>
+    <string name="rvNewsEmpty">Список новостей пуст</string>
+    <string name="rvFavouriteNewsEmpty">Список избранных новостей пуста</string>
 </resources>

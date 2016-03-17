@@ -1,6 +1,5 @@
-package ru.shipa.rssreader;
+package ru.shipa.rssreader.controller;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -19,26 +18,19 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import ru.shipa.rssreader.model.db.DBHelper;
+
 /**
  * Created by ShipVlad on 30.12.2015.
  */
 
 public class GetNewsTask extends AsyncTask<String, Void, String> {
-    Context ctx;
-    DBHelper dbHelper;
-    SQLiteDatabase db;
-    FragmentLines fragmentLines;
 
-    public GetNewsTask(Context ctx, FragmentLines fragmentLines) {
-        super();
-        this.ctx = ctx;
-        this.fragmentLines = fragmentLines;
-        dbHelper = new DBHelper(ctx);
-        db = dbHelper.getWritableDatabase();
-    }
 
     @Override
     protected String doInBackground(String... params) {
+        DBHelper dbHelper = DBHelper.getInstance();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String[] columns = new String[]{"lineName", "lineUrl"};
         Cursor c = db.query("lines_list", columns, null, null, null, null, null);
         if (c.moveToFirst()) {
@@ -51,13 +43,13 @@ public class GetNewsTask extends AsyncTask<String, Void, String> {
             } while (c.moveToNext());
         }
         c.close();
+        dbHelper.close();
         return null;
     }
 
     @Override
     protected void onPostExecute(String s) {
-        fragmentLines.refreshLinesComplete();
-        dbHelper.close();
+//        fragmentLines.refreshLinesComplete();
     }
 
     private String getNewsRequest(String url) throws IOException {

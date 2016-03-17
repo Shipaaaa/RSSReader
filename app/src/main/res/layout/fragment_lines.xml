@@ -9,20 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/lvLines"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvLines"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:clipToPadding="false"
             android:headerDividersEnabled="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
-        android:id="@android:id/empty"
+        android:id="@+id/tvEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Лента пуста"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
+        android:text="@string/rvLinesEmpty"
         android:layout_margin="15dp"
         android:textColor="@color/secondary_text" />
 </FrameLayout>
